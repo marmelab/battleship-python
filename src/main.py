@@ -1,6 +1,6 @@
 import sys
 
-from methods import initBoard, getBoardFromConfig, displayBoard
+from Board import initBoard, getBoardFromConfig, displayBoard
 
 playerConfig = sys.argv[1].split("=")[1]
 
