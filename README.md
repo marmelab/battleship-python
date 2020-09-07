@@ -17,6 +17,14 @@ Run the game
 make run
 ```
 
+## Test
+
+Runs all the tests of the project
+
+```
+make test
+```
+
 ## Example
 
 ![](docs/example.png)
