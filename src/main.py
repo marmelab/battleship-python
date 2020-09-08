@@ -5,16 +5,10 @@ from Board import initBoard, getBoardFromConfig, displayBoard, shoot
 from constants import UNICODE_FOR_A_CHAR
 from Game import boards, getPrimaryBoard, getOpponentBoard, switchPlayer
 from utils import isValid
+from Config import getPlayersConfig
 
-# read configuration files from both players
-player1ConfigFile = sys.argv[1].split("=")[1]
-player2ConfigFile = sys.argv[2].split("=")[1]
 
-with open("./config/" + player1ConfigFile, 'r') as f:
-    player1Config = f.read().splitlines()
-
-with open("./config/" + player2ConfigFile, 'r') as f:
-    player2Config = f.read().splitlines()
+player1Config, player2Config = getPlayersConfig()
 
 # initialize the boards
 boards["player1"]["primary"] = getBoardFromConfig(player1Config)
@@ -44,6 +38,7 @@ while True:
         coord = input("Player " + str(boards["currentPlayer"]) + ", where do you want to fire ?")
         if isValid(coord):
             break
+        print("Sorry, this value is incorrect. Example of valid coordinates: A1")
 
     boards = shoot(coord, boards)
 
