@@ -1,24 +1,14 @@
 import sys
 import os
-from random import randint
 from Board import initBoard, getBoardFromConfig, displayBoard, shoot
 from constants import UNICODE_FOR_A_CHAR
-from Game import boards, getPrimaryBoard, getOpponentBoard, switchPlayer
+from Game import boards, getPrimaryBoard, getOpponentBoard, switchPlayer, initGame
 from utils import isValid
 from Config import getPlayersConfig
 
+config1, config2 = getPlayersConfig()
 
-player1Config, player2Config = getPlayersConfig()
-
-# initialize the boards
-boards["player1"]["primary"] = getBoardFromConfig(player1Config)
-boards["player1"]["opponent"] = initBoard(10)
-
-boards["player2"]["primary"] = getBoardFromConfig(player2Config)
-boards["player2"]["opponent"] = initBoard(10)
-
-# pick the first player randomly
-boards["currentPlayer"] = randint(1,2)
+boards, currentPlayer = initGame(config1, config2, 10)
 
 while True:
     if (boards["currentPlayer"] == 1 and boards["hit"] == 0):

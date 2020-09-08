@@ -1,6 +1,9 @@
 from copy import deepcopy
+from Config import getPlayersConfig
+from Board import initBoard, getBoardFromConfig, displayBoard, shoot
+from random import randint
 
-boards =	{
+boards = {
   "player1": {
     "primary": [],
     "opponent": [],
@@ -27,3 +30,31 @@ def switchPlayer(boards):
         boardsCopy["currentPlayer"] = 1
 
     return boardsCopy
+
+def initGame(config1, config2, size):
+    player1Config, player2Config = getPlayersConfig()
+
+    boards = {
+        "player1": {
+            "primary": getBoardFromConfig(player1Config),
+            "opponent": initBoard(10),
+        },
+        "player2": {
+            "primary": getBoardFromConfig(player2Config),
+            "opponent": initBoard(10),
+        },
+        "currentPlayer": 0,
+        "hit": 0
+    }
+
+    boards["player1"]["primary"] = getBoardFromConfig(player1Config)
+    boards["player1"]["opponent"] = initBoard(10)
+
+    boards["player2"]["primary"] = getBoardFromConfig(player2Config)
+    boards["player2"]["opponent"] = initBoard(10)
+
+    # pick the first player randomly
+    boards["currentPlayer"] = randint(1,2)
+    # currentPlayer = randint(1,2)
+
+    return boards, boards["currentPlayer"]
