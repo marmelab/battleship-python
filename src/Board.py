@@ -62,22 +62,22 @@ def displayBoard(board, title="BOARD"):
 
 def shoot(coord, boards):
     boardsCopy = deepcopy(boards)
+    hit = 0
+
     if (boards["currentPlayer"] == 1):
         if (shipAt(coord, boards["player2"]["primary"])):
             boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
-            boardsCopy["hit"] = 1
+            hit = 1
         else:
             boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_FAILED_SHOT)
-            boardsCopy["hit"] = 0
     else:
         if (shipAt(coord, boards["player1"]["primary"])):
             boardsCopy["player2"]["opponent"] = updateBoard(boards["player2"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
-            boardsCopy["hit"] = 1
+            hit = 1
         else:
             boardsCopy["player2"]["opponent"] = updateBoard(boards["player2"]["opponent"], coord, SQUARE_FAILED_SHOT)
-            boardsCopy["hit"] = 0
 
-    return boardsCopy
+    return boardsCopy, hit
 
 
 def shipAt(coord, board):

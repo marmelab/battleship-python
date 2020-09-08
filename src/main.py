@@ -9,15 +9,17 @@ from Config import getPlayersConfig
 config1, config2 = getPlayersConfig()
 
 boards, currentPlayer = initGame(config1, config2, 10)
+hit = 0
 
 while True:
-    if (boards["currentPlayer"] == 1 and boards["hit"] == 0):
+    # TODO: extract this to a function like displayCurrentPlayerBoard
+    if (boards["currentPlayer"] == 1 and not hit):
         os.system('clear')
         input("PLAYER 2, look away. PLAYER 1, press enter when ready")
         os.system('clear')
         displayBoard(boards["player1"]["opponent"], "PLAYER 1'S TURN")
         # displayBoard(boards["player1"]["primary"], "PLAYER 1")
-    elif boards["currentPlayer"] == 2 and boards["hit"] == 0:
+    elif boards["currentPlayer"] == 2 and not hit:
         os.system('clear')
         input("PLAYER 1, look away. PLAYER 2, press enter when ready")
         os.system('clear')
@@ -30,8 +32,9 @@ while True:
             break
         print("Sorry, this value is incorrect. Example of valid coordinates: A1")
 
-    boards = shoot(coord, boards)
+    boards, hit = shoot(coord, boards)
 
+    # TODO: extract this to allow switching libs
     os.system('clear')
 
     if (boards["currentPlayer"] == 1):
@@ -39,7 +42,7 @@ while True:
     else:
         displayBoard(boards["player2"]["opponent"])
 
-    if boards["hit"] == 1:
+    if hit:
         print("Well done, you blew up some ship. Play again!")
     else:
         boards = switchPlayer(boards)

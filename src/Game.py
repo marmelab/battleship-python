@@ -3,6 +3,7 @@ from Config import getPlayersConfig
 from Board import initBoard, getBoardFromConfig, displayBoard, shoot
 from random import randint
 
+# TODO: remove currentPlayer and hit from the structure and use variables in the main instead
 boards = {
   "player1": {
     "primary": [],
@@ -13,7 +14,6 @@ boards = {
     "opponent": [],
   },
   "currentPlayer": 0,
-  "hit": 0
 }
 
 def getPrimaryBoard(player):
@@ -44,14 +44,7 @@ def initGame(config1, config2, size):
             "opponent": initBoard(10),
         },
         "currentPlayer": 0,
-        "hit": 0
     }
-
-    boards["player1"]["primary"] = getBoardFromConfig(player1Config)
-    boards["player1"]["opponent"] = initBoard(10)
-
-    boards["player2"]["primary"] = getBoardFromConfig(player2Config)
-    boards["player2"]["opponent"] = initBoard(10)
 
     # pick the first player randomly
     boards["currentPlayer"] = randint(1,2)
