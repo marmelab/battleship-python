@@ -10,10 +10,11 @@ def initBoard(size):
 
     return board
 
-def getBoardFromConfig(config, board):
+def getBoardFromConfig(config):
+    board = initBoard(10)
+
     for shipCoords in config:
         coords = shipCoords.split(",")
-        
         for coord in coords:
             x = ord(coord[0]) - UNICODE_FOR_A_CHAR
             y = int(coord[1]) - 1

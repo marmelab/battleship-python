@@ -4,9 +4,8 @@ from Board import initBoard, getBoardFromConfig, displayBoard
 
 playerConfig = sys.argv[1].split("=")[1]
 
-f = open("./config/" + playerConfig, "r")
-config = f.read().splitlines()
+with open("./config/" + playerConfig, 'r') as f:
+    config = f.read().splitlines()
 
-board = initBoard(10)
-board = getBoardFromConfig(config, board)
+board = getBoardFromConfig(config)
 displayBoard(board)
