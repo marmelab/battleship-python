@@ -1,4 +1,7 @@
-from constants import UNICODE_FOR_A_CHAR
+from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP
+from utils import getX, getY
+from copy import deepcopy
+import os
 
 def initBoard(size):
     board = []
@@ -46,10 +49,48 @@ def displayBoard(board, title="BOARD"):
         line = chr(x + UNICODE_FOR_A_CHAR)
 
         for i in range(len(board)):
-            
-            if board[x][i]:
+            if board[x][i] == SQUARE_SHIP:
+                line += " S "
+            elif board[x][i] == SQUARE_FAILED_SHOT:
+                line += " O "
+            elif board[x][i] == SQUARE_SUCCESS_SHOT:
                 line += " X "
             else:
                 line += "   "
 
         print(line)
+
+def shoot(coord, boards):
+    boardsCopy = deepcopy(boards)
+    if (boards["currentPlayer"] == 1):
+        if (shipAt(coord, boards["player2"]["primary"])):
+            boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
+            boardsCopy["hit"] = 1
+        else:
+            boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_FAILED_SHOT)
+            boardsCopy["hit"] = 0
+    else:
+        if (shipAt(coord, boards["player1"]["primary"])):
+            boardsCopy["player2"]["opponent"] = updateBoard(boards["player2"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
+            boardsCopy["hit"] = 1
+        else:
+            boardsCopy["player2"]["opponent"] = updateBoard(boards["player2"]["opponent"], coord, SQUARE_FAILED_SHOT)
+            boardsCopy["hit"] = 0
+
+    return boardsCopy
+
+
+def shipAt(coord, board):
+    x = getX(coord)
+    y = getY(coord)
+    
+    return board[x][y] == SQUARE_SHIP
+
+def updateBoard(board, coord, newState):
+    boardCopy = deepcopy(board)
+    x = getX(coord)
+    y = getY(coord)
+    
+    boardCopy[x][y] = newState
+
+    return boardCopy
