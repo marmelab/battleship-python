@@ -1,0 +1,17 @@
+# https://travis-ci.com/github/marmelab/battleship-python
+
+language: python
+
+python:
+  - "3.6"
+
+services:
+  - docker
+
+install: make install
+
+script: make test
+
+branches:
+  only:
+    - master
