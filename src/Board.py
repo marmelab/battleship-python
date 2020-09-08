@@ -23,7 +23,8 @@ def getBoardFromConfig(config):
 
     return board
     
-def displayBoard(board):
+def displayBoard(board, title="BOARD"):
+    print(title)
     print(' ', end='')
 
     # print header
