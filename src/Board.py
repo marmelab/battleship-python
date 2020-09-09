@@ -1,4 +1,7 @@
-from constants import UNICODE_FOR_A_CHAR
+from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
+from utils import getCoords
+from copy import deepcopy
+import os
 
 def initBoard(size):
     board = []
@@ -23,7 +26,8 @@ def getBoardFromConfig(config):
 
     return board
     
-def displayBoard(board):
+def displayBoard(board, title="BOARD"):
+    print(title)
     print(' ', end='')
 
     # print header
@@ -45,10 +49,47 @@ def displayBoard(board):
         line = chr(x + UNICODE_FOR_A_CHAR)
 
         for i in range(len(board)):
-            
-            if board[x][i]:
+            if board[x][i] == SQUARE_SHIP:
+                line += " S "
+            elif board[x][i] == SQUARE_FAILED_SHOT:
+                line += " O "
+            elif board[x][i] == SQUARE_SUCCESS_SHOT:
                 line += " X "
             else:
                 line += "   "
 
         print(line)
+
+def shoot(coord, boards, currentPlayer):
+
+    if (currentPlayer == PLAYER_1):
+        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_1, PLAYER_2)
+    else:
+        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_2, PLAYER_1)
+
+    return updatedBoards, hit
+
+def updateBoardsAndHit(coord, boards, currentPlayer, opponentPlayer):
+    boardsCopy = deepcopy(boards)
+    hit = 0
+
+    if (shipFoundAt(coord, boards[opponentPlayer]["primary"])):
+        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_SUCCESS_SHOT)
+        hit = 1
+    else:
+        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_FAILED_SHOT)
+
+    return boardsCopy, hit
+
+def shipFoundAt(coord, board):
+    x, y = getCoords(coord)
+
+    return board[x][y] == SQUARE_SHIP
+
+def updateBoard(board, coord, newState):
+    boardCopy = deepcopy(board)
+    x, y = getCoords(coord)
+    
+    boardCopy[x][y] = newState
+
+    return boardCopy

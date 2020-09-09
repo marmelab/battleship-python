@@ -1,11 +1,33 @@
 import sys
+import os
+from Board import initBoard, getBoardFromConfig, displayBoard, shoot
+from constants import UNICODE_FOR_A_CHAR
+from Game import switchPlayer, initGame
+from utils import isValid
+from Config import getPlayersConfig
+import ui
 
-from Board import initBoard, getBoardFromConfig, displayBoard
+config1, config2 = getPlayersConfig()
 
-playerConfig = sys.argv[1].split("=")[1]
+boards, currentPlayer = initGame(config1, config2, 10)
+hit = 0
 
-with open("./config/" + playerConfig, 'r') as f:
-    config = f.read().splitlines()
+while True:
+    # Display current player board
+    ui.displayPlayerBoard(boards, currentPlayer, hit)
+    
+    # Ask for a coordinate
+    coord = input(currentPlayer + ", where do you want to fire ? ")
+    while not isValid(coord):
+        print("Sorry, this value is incorrect. Example of valid coordinates: A1")
+        coord = input(currentPlayer + ", where do you want to fire ? ")
 
-board = getBoardFromConfig(config)
-displayBoard(board)
+    # Launch a missile to that coordinate
+    boards, hit = shoot(coord, boards, currentPlayer)
+
+    # Display result
+    ui.displayShootResult(hit, boards, currentPlayer)
+
+    # Switch player if the hit succeeded
+    if not hit: 
+        currentPlayer = switchPlayer(currentPlayer)
