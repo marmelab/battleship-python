@@ -25,40 +25,6 @@ def getBoardFromConfig(config):
             board[x][y] = 1
 
     return board
-    
-def displayBoard(board, title="BOARD"):
-    print(title)
-    print(' ', end='')
-
-    # print header
-    for x in range(len(board)):
-        print(" " + str(x+1) + " ", end='')
-
-    # ascii codes for displaying grid
-    # upperleftcorner = u'\u2554'  
-    # downT = u'\u2569'
-    # T = u'\u2566'
-    # F = u'\u2560'
-    # line = u'\u2550'
-    # cross = u'\u256c'
-
-    print()
-
-    for x in range(len(board)):
-        # display letters using their unicode (starting form A)
-        line = chr(x + UNICODE_FOR_A_CHAR)
-
-        for i in range(len(board)):
-            if board[x][i] == SQUARE_SHIP:
-                line += " S "
-            elif board[x][i] == SQUARE_FAILED_SHOT:
-                line += " O "
-            elif board[x][i] == SQUARE_SUCCESS_SHOT:
-                line += " X "
-            else:
-                line += "   "
-
-        print(line)
 
 def shoot(coord, boards, currentPlayer):
 

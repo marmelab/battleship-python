@@ -1,8 +1,6 @@
 import sys
-import os
-from Board import initBoard, getBoardFromConfig, displayBoard, shoot
-from constants import UNICODE_FOR_A_CHAR
-from Game import switchPlayer, initGame
+from Board import shoot
+from Game import switchPlayer, initGame, decrementTargetFleetLife
 from utils import isValid
 from Config import getPlayersConfig
 import ui
@@ -28,6 +26,8 @@ while True:
     # Display result
     ui.displayShootResult(hit, boards, currentPlayer)
 
-    # Switch player if the hit succeeded
-    if not hit: 
+    # Decrement target's fleet life if hit or switch player
+    if hit:
+        boards = decrementTargetFleetLife(boards, currentPlayer)
+    else: 
         currentPlayer = switchPlayer(currentPlayer)

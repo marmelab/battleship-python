@@ -8,3 +8,5 @@ SQUARE_FAILED_SHOT = 3
 
 PLAYER_1 = "player1"
 PLAYER_2 = "player2"
+
+FLEET_LIFE = 17
