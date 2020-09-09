@@ -5,6 +5,7 @@ from constants import UNICODE_FOR_A_CHAR
 from Game import switchPlayer, initGame
 from utils import isValid
 from Config import getPlayersConfig
+import ui
 
 config1, config2 = getPlayersConfig()
 
@@ -12,30 +13,17 @@ boards, currentPlayer = initGame(config1, config2, 10)
 hit = 0
 
 while True:
-    # TODO: extract this to a function like displayCurrentPlayerBoard
-    if (currentPlayer == 1 and not hit):
-        os.system('clear')
-        input("PLAYER 2, look away. PLAYER 1, press enter when ready")
-        os.system('clear')
-        displayBoard(boards["player1"]["opponent"], "PLAYER 1'S TURN")
-        # displayBoard(boards["player1"]["primary"], "PLAYER 1")
-    elif currentPlayer == 2 and not hit:
-        os.system('clear')
-        input("PLAYER 1, look away. PLAYER 2, press enter when ready")
-        os.system('clear')
-        displayBoard(boards["player2"]["opponent"], "PLAYER 2'S TURN")
+    ui.displayPlayerBoard(boards, currentPlayer, hit)
+    
+    coord = input("Player " + str(currentPlayer) + ", where do you want to fire ?")
 
-
-    while True:
-        coord = input("Player " + str(currentPlayer) + ", where do you want to fire ?")
-        if isValid(coord):
-            break
+    while not isValid(coord):
         print("Sorry, this value is incorrect. Example of valid coordinates: A1")
+        coord = input("Player " + str(currentPlayer) + ", where do you want to fire ?")
 
     boards, hit = shoot(coord, boards, currentPlayer)
 
-    # TODO: extract this to allow switching libs
-    os.system('clear')
+    ui.clear()
 
     if (currentPlayer == 1):
         displayBoard(boards["player1"]["opponent"])
