@@ -2,12 +2,13 @@ from copy import deepcopy
 from Config import getPlayersConfig
 from Board import initBoard, getBoardFromConfig, displayBoard, shoot
 from random import randint
+from constants import PLAYER_1, PLAYER_2
 
 def switchPlayer(currentPlayer):
-    if currentPlayer == 1:
-        nextPlayer = 2
+    if currentPlayer == PLAYER_1:
+        nextPlayer = PLAYER_2
     else:
-        nextPlayer = 1
+        nextPlayer = PLAYER_1
 
     return nextPlayer
 

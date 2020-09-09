@@ -1,4 +1,4 @@
-from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP
+from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
 from utils import getCoords
 from copy import deepcopy
 import os
@@ -64,14 +64,14 @@ def shoot(coord, boards, currentPlayer):
     boardsCopy = deepcopy(boards)
     hit = 0
 
-    if (currentPlayer == 1):
-        if (shipAt(coord, boards["player2"]["primary"])):
+    if (currentPlayer == PLAYER_1):
+        if (shipFoundAt(coord, boards["player2"]["primary"])):
             boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
             hit = 1
         else:
             boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_FAILED_SHOT)
     else:
-        if (shipAt(coord, boards["player1"]["primary"])):
+        if (shipFoundAt(coord, boards["player1"]["primary"])):
             boardsCopy["player2"]["opponent"] = updateBoard(boards["player2"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
             hit = 1
         else:
@@ -80,7 +80,7 @@ def shoot(coord, boards, currentPlayer):
     return boardsCopy, hit
 
 
-def shipAt(coord, board):
+def shipFoundAt(coord, board):
     x, y = getCoords(coord)
 
     return board[x][y] == SQUARE_SHIP
