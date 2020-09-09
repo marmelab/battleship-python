@@ -1,5 +1,5 @@
 import os
-from Game import switchPlayer
+from Game import switchPlayer, gameIsWon
 from copy import deepcopy
 from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
 
@@ -58,14 +58,15 @@ def displayShootResult(hit, boards, currentPlayer):
     clear()
 
     if (currentPlayer == PLAYER_1):
-        displayFleetLife(PLAYER_2, boards)
+        displayFleetLife(PLAYER_1, boards)
         displayBoard(boards[PLAYER_1]["opponent"])
     else:
         displayFleetLife(PLAYER_2, boards)
         displayBoard(boards[PLAYER_2]["opponent"])
 
     if hit:
-        print("Well done, you blew up some ship. Play again!")
+        if not gameIsWon(boards):
+            print("Well done, you blew up some ship. Play again!")
     else:
         input("Too bad, you hit the water. Press enter to continue.")
 

@@ -23,13 +23,13 @@ while not gameIsWon(boards):
     # Launch a missile to that coordinate
     boards, hit = shoot(coord, boards, currentPlayer)
 
+    if hit:
+        boards = decrementTargetFleetLife(boards, currentPlayer)
+
     # Display result
     ui.displayShootResult(hit, boards, currentPlayer)
 
-    # Decrement target's fleet life if hit or switch player
-    if hit:
-        boards = decrementTargetFleetLife(boards, currentPlayer)
-    else: 
+    if not hit: 
         currentPlayer = switchPlayer(currentPlayer)
 
 ui.displayWinner(boards, currentPlayer)
