@@ -37,11 +37,11 @@ def shoot(coord, boards, currentPlayer):
 
 def updateBoardsAndHit(coord, boards, currentPlayer, opponentPlayer):
     boardsCopy = deepcopy(boards)
-    hit = 0
+    hit = False
 
     if (shipFoundAt(coord, boards[opponentPlayer]["primary"])):
         boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_SUCCESS_SHOT)
-        hit = 1
+        hit = True
     else:
         boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_FAILED_SHOT)
 
