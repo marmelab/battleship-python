@@ -1,6 +1,5 @@
 import sys
-from Board import shoot
-from Game import switchPlayer, initGame, decrementTargetFleetLife, gameIsWon
+from Game import shoot, switchPlayer, initGame, gameIsWon
 from utils import isValid
 from Config import getPlayersConfig
 import ui
@@ -26,9 +25,6 @@ while newGame:
 
         # Launch a missile to that coordinate
         boards, hit = shoot(coord, boards, currentPlayer)
-
-        if hit:
-            boards = decrementTargetFleetLife(boards, currentPlayer)
 
         # Display result
         ui.displayShootResult(hit, boards, currentPlayer)

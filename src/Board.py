@@ -26,15 +26,6 @@ def getBoardFromConfig(config):
 
     return board
 
-def shoot(coord, boards, currentPlayer):
-
-    if (currentPlayer == PLAYER_1):
-        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_1, PLAYER_2)
-    else:
-        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_2, PLAYER_1)
-
-    return updatedBoards, hit
-
 def updateBoardsAndHit(coord, boards, currentPlayer, opponentPlayer):
     boardsCopy = deepcopy(boards)
     hit = False

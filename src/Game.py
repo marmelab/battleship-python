@@ -1,6 +1,6 @@
 from copy import deepcopy
 from Config import getPlayersConfig
-from Board import initBoard, getBoardFromConfig, shoot
+from Board import initBoard, getBoardFromConfig, updateBoardsAndHit
 from random import randint
 from constants import PLAYER_1, PLAYER_2, FLEET_LIFE
 
@@ -13,16 +13,14 @@ def switchPlayer(currentPlayer):
     return nextPlayer
 
 def initGame(config1, config2, size):
-    player1Config, player2Config = getPlayersConfig()
-
     boards = {
         PLAYER_1: {
-            "primary": getBoardFromConfig(player1Config),
+            "primary": getBoardFromConfig(config1),
             "opponent": initBoard(10),
             "life": FLEET_LIFE
         },
         PLAYER_2: {
-            "primary": getBoardFromConfig(player2Config),
+            "primary": getBoardFromConfig(config2),
             "opponent": initBoard(10),
             "life": FLEET_LIFE
         }
@@ -49,3 +47,14 @@ def decrementTargetFleetLife(boards, attacker):
 def gameIsWon(boards):
     return boards[PLAYER_1]["life"] <= 0 or boards[PLAYER_2]["life"] <= 0
 
+def shoot(coord, boards, currentPlayer):
+
+    if (currentPlayer == PLAYER_1):
+        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_1, PLAYER_2)
+    else:
+        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_2, PLAYER_1)
+
+    if hit:
+        updatedBoards = decrementTargetFleetLife(updatedBoards, currentPlayer)
+
+    return updatedBoards, hit
