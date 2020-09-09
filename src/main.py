@@ -13,25 +13,17 @@ boards, currentPlayer = initGame(config1, config2, 10)
 hit = 0
 
 while True:
+    # Display current player board
     ui.displayPlayerBoard(boards, currentPlayer, hit)
     
+    # Ask for a coordinate
     coord = input("Player " + str(currentPlayer) + ", where do you want to fire ?")
-
     while not isValid(coord):
         print("Sorry, this value is incorrect. Example of valid coordinates: A1")
         coord = input("Player " + str(currentPlayer) + ", where do you want to fire ?")
 
+    # Launch a missile to that coordinate
     boards, hit = shoot(coord, boards, currentPlayer)
 
-    ui.clear()
-
-    if (currentPlayer == 1):
-        displayBoard(boards["player1"]["opponent"])
-    else:
-        displayBoard(boards["player2"]["opponent"])
-
-    if hit:
-        print("Well done, you blew up some ship. Play again!")
-    else:
-        currentPlayer = switchPlayer(currentPlayer)
-        input("Too bad, you hit the water. Press enter to continue.")
+    # Display result and get switch player if the shoot missed
+    currentPlayer = ui.displayShootResult(hit, boards, currentPlayer)

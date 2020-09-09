@@ -1,5 +1,5 @@
 from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP
-from utils import getX, getY
+from utils import getCoords
 from copy import deepcopy
 import os
 
@@ -81,15 +81,13 @@ def shoot(coord, boards, currentPlayer):
 
 
 def shipAt(coord, board):
-    x = getX(coord)
-    y = getY(coord)
-    
+    x, y = getCoords(coord)
+
     return board[x][y] == SQUARE_SHIP
 
 def updateBoard(board, coord, newState):
     boardCopy = deepcopy(board)
-    x = getX(coord)
-    y = getY(coord)
+    x, y = getCoords(coord)
     
     boardCopy[x][y] = newState
 
