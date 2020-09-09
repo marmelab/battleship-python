@@ -17,10 +17,10 @@ while True:
     ui.displayPlayerBoard(boards, currentPlayer, hit)
     
     # Ask for a coordinate
-    coord = input("Player " + str(currentPlayer) + ", where do you want to fire ? ")
+    coord = input(currentPlayer + ", where do you want to fire ? ")
     while not isValid(coord):
         print("Sorry, this value is incorrect. Example of valid coordinates: A1")
-        coord = input("Player " + str(currentPlayer) + ", where do you want to fire ? ")
+        coord = input(currentPlayer + ", where do you want to fire ? ")
 
     # Launch a missile to that coordinate
     boards, hit = shoot(coord, boards, currentPlayer)

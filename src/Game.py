@@ -16,17 +16,20 @@ def initGame(config1, config2, size):
     player1Config, player2Config = getPlayersConfig()
 
     boards = {
-        "player1": {
+        PLAYER_1: {
             "primary": getBoardFromConfig(player1Config),
             "opponent": initBoard(10),
         },
-        "player2": {
+        PLAYER_2: {
             "primary": getBoardFromConfig(player2Config),
             "opponent": initBoard(10),
         }
     }
 
     # pick the first player randomly
-    currentPlayer = randint(1,2)
+    if randint(1,2) == 1:
+        currentPlayer = PLAYER_1
+    else:
+        currentPlayer = PLAYER_2
 
     return boards, currentPlayer

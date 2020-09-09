@@ -61,24 +61,25 @@ def displayBoard(board, title="BOARD"):
         print(line)
 
 def shoot(coord, boards, currentPlayer):
+
+    if (currentPlayer == PLAYER_1):
+        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_1, PLAYER_2)
+    else:
+        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_2, PLAYER_1)
+
+    return updatedBoards, hit
+
+def updateBoardsAndHit(coord, boards, currentPlayer, opponentPlayer):
     boardsCopy = deepcopy(boards)
     hit = 0
 
-    if (currentPlayer == PLAYER_1):
-        if (shipFoundAt(coord, boards["player2"]["primary"])):
-            boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
-            hit = 1
-        else:
-            boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_FAILED_SHOT)
+    if (shipFoundAt(coord, boards[opponentPlayer]["primary"])):
+        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_SUCCESS_SHOT)
+        hit = 1
     else:
-        if (shipFoundAt(coord, boards["player1"]["primary"])):
-            boardsCopy["player2"]["opponent"] = updateBoard(boards["player2"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
-            hit = 1
-        else:
-            boardsCopy["player2"]["opponent"] = updateBoard(boards["player2"]["opponent"], coord, SQUARE_FAILED_SHOT)
+        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_FAILED_SHOT)
 
     return boardsCopy, hit
-
 
 def shipFoundAt(coord, board):
     x, y = getCoords(coord)
