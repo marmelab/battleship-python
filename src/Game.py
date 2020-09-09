@@ -45,3 +45,7 @@ def decrementTargetFleetLife(boards, attacker):
         boardsCopy[PLAYER_1]["life"] -= 1
 
     return boardsCopy
+
+def gameIsWon(boards):
+    return boards[PLAYER_1]["life"] <= 0 or boards[PLAYER_2]["life"] <= 0
+

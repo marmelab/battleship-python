@@ -71,3 +71,16 @@ def displayShootResult(hit, boards, currentPlayer):
 
 def displayFleetLife(player, boards):
     print('YOUR FLEET LIFE: ' + str(boards[player]["life"]))
+
+def displayWinner(boards, player):
+    print("You blew up your oppponent's fleet! Congratulations " + getPlayerName(player) + "!")
+
+def getPlayerName(player):
+    name = 'PLAYER'
+
+    if player == PLAYER_1:
+        name = 'PLAYER 1'
+    else:
+        name = 'PLAYER 2'
+
+    return name

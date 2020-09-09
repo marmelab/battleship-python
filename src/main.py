@@ -1,6 +1,6 @@
 import sys
 from Board import shoot
-from Game import switchPlayer, initGame, decrementTargetFleetLife
+from Game import switchPlayer, initGame, decrementTargetFleetLife, gameIsWon
 from utils import isValid
 from Config import getPlayersConfig
 import ui
@@ -10,7 +10,7 @@ config1, config2 = getPlayersConfig()
 boards, currentPlayer = initGame(config1, config2, 10)
 hit = 0
 
-while True:
+while not gameIsWon(boards):
     # Display current player board
     ui.displayPlayerBoard(boards, currentPlayer, hit)
     
@@ -31,3 +31,5 @@ while True:
         boards = decrementTargetFleetLife(boards, currentPlayer)
     else: 
         currentPlayer = switchPlayer(currentPlayer)
+
+ui.displayWinner(boards, currentPlayer)
