@@ -60,11 +60,11 @@ def displayBoard(board, title="BOARD"):
 
         print(line)
 
-def shoot(coord, boards):
+def shoot(coord, boards, currentPlayer):
     boardsCopy = deepcopy(boards)
     hit = 0
 
-    if (boards["currentPlayer"] == 1):
+    if (currentPlayer == 1):
         if (shipAt(coord, boards["player2"]["primary"])):
             boardsCopy["player1"]["opponent"] = updateBoard(boards["player1"]["opponent"], coord, SQUARE_SUCCESS_SHOT)
             hit = 1
