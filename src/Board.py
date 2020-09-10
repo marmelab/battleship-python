@@ -25,61 +25,31 @@ def getBoardFromConfig(config):
             board[x][y] = 1
 
     return board
-    
-def displayBoard(board, title="BOARD"):
-    print(title)
-    print(' ', end='')
 
-    # print header
-    for x in range(len(board)):
-        print(" " + str(x+1) + " ", end='')
+def getShipsFromConfig(config):
+    ships = []
 
-    # ascii codes for displaying grid
-    # upperleftcorner = u'\u2554'  
-    # downT = u'\u2569'
-    # T = u'\u2566'
-    # F = u'\u2560'
-    # line = u'\u2550'
-    # cross = u'\u256c'
+    for shipCoords in config:
+        coords = shipCoords.split(",")
+        shipCoords = []
+        for coord in coords:
+            shipCoords.append(coord)
 
-    print()
+        ships.append(shipCoords)
 
-    for x in range(len(board)):
-        # display letters using their unicode (starting form A)
-        line = chr(x + UNICODE_FOR_A_CHAR)
+    return ships
 
-        for i in range(len(board)):
-            if board[x][i] == SQUARE_SHIP:
-                line += " S "
-            elif board[x][i] == SQUARE_FAILED_SHOT:
-                line += " O "
-            elif board[x][i] == SQUARE_SUCCESS_SHOT:
-                line += " X "
-            else:
-                line += "   "
+def updateBoardsAndHit(coord, gameState, currentPlayer, opponentPlayer):
+    gameStateCopy = deepcopy(gameState)
+    hit = False
 
-        print(line)
-
-def shoot(coord, boards, currentPlayer):
-
-    if (currentPlayer == PLAYER_1):
-        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_1, PLAYER_2)
+    if (shipFoundAt(coord, gameState[opponentPlayer]["primary"])):
+        gameStateCopy[currentPlayer]["opponent_board"] = updateBoard(gameState[currentPlayer]["opponent_board"], coord, SQUARE_SUCCESS_SHOT)
+        hit = True
     else:
-        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_2, PLAYER_1)
+        gameStateCopy[currentPlayer]["opponent_board"] = updateBoard(gameState[currentPlayer]["opponent_board"], coord, SQUARE_FAILED_SHOT)
 
-    return updatedBoards, hit
-
-def updateBoardsAndHit(coord, boards, currentPlayer, opponentPlayer):
-    boardsCopy = deepcopy(boards)
-    hit = 0
-
-    if (shipFoundAt(coord, boards[opponentPlayer]["primary"])):
-        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_SUCCESS_SHOT)
-        hit = 1
-    else:
-        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_FAILED_SHOT)
-
-    return boardsCopy, hit
+    return gameStateCopy, hit
 
 def shipFoundAt(coord, board):
     x, y = getCoords(coord)
