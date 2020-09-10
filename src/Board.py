@@ -26,17 +26,30 @@ def getBoardFromConfig(config):
 
     return board
 
-def updateBoardsAndHit(coord, boards, currentPlayer, opponentPlayer):
-    boardsCopy = deepcopy(boards)
+def getShipsFromConfig(config):
+    ships = []
+
+    for shipCoords in config:
+        coords = shipCoords.split(",")
+        shipCoords = []
+        for coord in coords:
+            shipCoords.append(coord)
+
+        ships.append(shipCoords)
+
+    return ships
+
+def updateBoardsAndHit(coord, gameState, currentPlayer, opponentPlayer):
+    gameStateCopy = deepcopy(gameState)
     hit = False
 
-    if (shipFoundAt(coord, boards[opponentPlayer]["primary"])):
-        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_SUCCESS_SHOT)
+    if (shipFoundAt(coord, gameState[opponentPlayer]["primary"])):
+        gameStateCopy[currentPlayer]["opponent"] = updateBoard(gameState[currentPlayer]["opponent"], coord, SQUARE_SUCCESS_SHOT)
         hit = True
     else:
-        boardsCopy[currentPlayer]["opponent"] = updateBoard(boards[currentPlayer]["opponent"], coord, SQUARE_FAILED_SHOT)
+        gameStateCopy[currentPlayer]["opponent"] = updateBoard(gameState[currentPlayer]["opponent"], coord, SQUARE_FAILED_SHOT)
 
-    return boardsCopy, hit
+    return gameStateCopy, hit
 
 def shipFoundAt(coord, board):
     x, y = getCoords(coord)

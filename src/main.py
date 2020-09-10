@@ -10,28 +10,44 @@ newGame = True
 
 while newGame:
 
-    boards, currentPlayer = initGame(config1, config2, 10)
+    gameState, currentPlayer = initGame(config1, config2, 10)
     hit = False
 
-    while not gameIsWon(boards):
+    while not gameIsWon(gameState, currentPlayer):
+
+        if not hit:
+            ui.displayLookAwayMsg(currentPlayer)
+
         # Display current player board
-        ui.displayPlayerBoard(boards, currentPlayer, hit)
+        ui.displayPlayerBoard(gameState, currentPlayer, hit)
         
         # Ask for a coordinate
-        coord = input(currentPlayer + ", where do you want to fire ? ")
+        print()
+        coord = input(currentPlayer + ", where do you want to fire (example: A1)? ")
         while not isValid(coord):
             print("Sorry, this value is incorrect. Example of valid coordinates: A1")
-            coord = input(currentPlayer + ", where do you want to fire ? ")
+            print()
+            coord = input(currentPlayer + ", where do you want to fire (example: A1)?  ")
 
         # Launch a missile to that coordinate
-        boards, hit = shoot(coord, boards, currentPlayer)
+        gameState, hit, shipSunk = shoot(coord, gameState, currentPlayer)
 
         # Display result
-        ui.displayShootResult(hit, boards, currentPlayer)
+        ui.displayPlayerBoard(gameState, currentPlayer, hit)
 
-        if not hit: 
+        if gameIsWon(gameState, currentPlayer):
+            break
+        
+        print()
+
+        if shipSunk:
+            input("Well done, you blew up an ENTIRE ship. Press enter to play again!")
+        elif hit:
+            input("Nice, you hit a ship. Press enter to play again!")
+        else:
+            input("Too bad, you hit the water. Press enter to continue.")
             currentPlayer = switchPlayer(currentPlayer)
 
-    ui.displayWinner(boards, currentPlayer)
+    ui.displayWinner(gameState, currentPlayer)
 
     newGame = ui.queryYesNo("Do you want to start a new game?")

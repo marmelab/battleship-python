@@ -1,25 +1,48 @@
 import os
 import sys
-from Game import switchPlayer, gameIsWon
+from Game import switchPlayer, gameIsWon, isShipPartHit
 from copy import deepcopy
 from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
 
 def clear():
     os.system('clear')
 
-def displayPlayerBoard(boards, player, hit):
-    if (player == PLAYER_1 and not hit):
-        clear()
+def displayPlayerFleet(boards, player):
+    print("MY FLEET STATE")
+    
+    for ship in boards[player]["ships"]:
+        displayShip(ship, boards, player)
+
+def displayLookAwayMsg(player):
+    clear()
+    if (player == PLAYER_1):
         input("PLAYER 2, look away. PLAYER 1, press enter when ready")
-        clear()
-        displayFleetLife(PLAYER_1, boards)
-        displayBoard(boards[PLAYER_1]["opponent"], "PLAYER 1'S TURN")
-    elif player == PLAYER_2 and not hit:
-        clear()
+    elif player == PLAYER_2:
         input("PLAYER 1, look away. PLAYER 2, press enter when ready")
-        clear()
-        displayFleetLife(PLAYER_2, boards)
+
+def displayPlayerBoard(boards, player, hit):
+    clear()
+
+    if (player == PLAYER_1):
+        displayPlayerFleet(boards, PLAYER_1)
+        print()
+        displayBoard(boards[PLAYER_1]["opponent"], "PLAYER 1'S TURN")
+    elif player == PLAYER_2:
+        displayPlayerFleet(boards, PLAYER_2)
+        print()
         displayBoard(boards[PLAYER_2]["opponent"], "PLAYER 2'S TURN")
+    
+def displayShip(ship, boards, player):
+    for shipPart in ship:
+        line = ""
+        if (isShipPartHit(shipPart, boards, player)):
+            line += "[X]"
+        else:
+            line += "[ ]"
+
+        print(line, end = " ")
+
+    print()
 
 def displayBoard(board, title="BOARD"):
     print(title)
@@ -61,29 +84,14 @@ def displayBoard(board, title="BOARD"):
         print("--- ", end="")
 
     print()
-    
-
-def displayShootResult(hit, boards, currentPlayer):
-    clear()
-
-    if (currentPlayer == PLAYER_1):
-        displayFleetLife(PLAYER_1, boards)
-        displayBoard(boards[PLAYER_1]["opponent"])
-    else:
-        displayFleetLife(PLAYER_2, boards)
-        displayBoard(boards[PLAYER_2]["opponent"])
-
-    if hit:
-        if not gameIsWon(boards):
-            print("Well done, you blew up some ship. Play again!")
-    else:
-        input("Too bad, you hit the water. Press enter to continue.")
 
 def displayFleetLife(player, boards):
     print('YOUR FLEET LIFE: ' + str(boards[player]["life"]))
 
 def displayWinner(boards, player):
+    print()
     print("You blew up your oppponent's fleet! Congratulations " + getPlayerName(player) + "!")
+    print()
 
 def getPlayerName(player):
     name = 'PLAYER'

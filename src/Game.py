@@ -1,8 +1,9 @@
 from copy import deepcopy
 from Config import getPlayersConfig
-from Board import initBoard, getBoardFromConfig, updateBoardsAndHit
+from Board import initBoard, getBoardFromConfig, updateBoardsAndHit, getShipsFromConfig
 from random import randint
-from constants import PLAYER_1, PLAYER_2, FLEET_LIFE
+from constants import PLAYER_1, PLAYER_2, FLEET_LIFE, SQUARE_SUCCESS_SHOT
+from utils import getCoords
 
 def switchPlayer(currentPlayer):
     if currentPlayer == PLAYER_1:
@@ -13,16 +14,18 @@ def switchPlayer(currentPlayer):
     return nextPlayer
 
 def initGame(config1, config2, size):
-    boards = {
+    gameState = {
         PLAYER_1: {
             "primary": getBoardFromConfig(config1),
             "opponent": initBoard(10),
-            "life": FLEET_LIFE
+            "life": FLEET_LIFE,
+            "ships": getShipsFromConfig(config1)
         },
         PLAYER_2: {
             "primary": getBoardFromConfig(config2),
             "opponent": initBoard(10),
-            "life": FLEET_LIFE
+            "life": FLEET_LIFE,
+            "ships": getShipsFromConfig(config2)
         }
     }
 
@@ -32,7 +35,7 @@ def initGame(config1, config2, size):
     else:
         currentPlayer = PLAYER_2
 
-    return boards, currentPlayer
+    return gameState, currentPlayer
 
 def decrementTargetFleetLife(boards, attacker):
     boardsCopy = deepcopy(boards)
@@ -44,17 +47,70 @@ def decrementTargetFleetLife(boards, attacker):
 
     return boardsCopy
 
-def gameIsWon(boards):
-    return boards[PLAYER_1]["life"] <= 0 or boards[PLAYER_2]["life"] <= 0
+def gameIsWon(boards, player):
+    gameIsWon = True
 
-def shoot(coord, boards, currentPlayer):
+    # check all of the ships coords on the board and look if it contains SUCCESS
+    for ship in boards[playerOpponent(player)]["ships"]:
+        for coord in ship:
+            if not isShipPartHit(coord, boards, playerOpponent(player)):
+                gameIsWon = False
+                break
+
+    return gameIsWon
+
+def playerOpponent(player):
+    if player == PLAYER_1:
+        return PLAYER_2
+    else:
+        return PLAYER_1
+
+def shoot(coord, gameState, currentPlayer):
 
     if (currentPlayer == PLAYER_1):
-        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_1, PLAYER_2)
+        updatedGameState, hit = updateBoardsAndHit(coord, gameState, PLAYER_1, PLAYER_2)
     else:
-        updatedBoards, hit = updateBoardsAndHit(coord, boards, PLAYER_2, PLAYER_1)
+        updatedGameState, hit = updateBoardsAndHit(coord, gameState, PLAYER_2, PLAYER_1)
+
+    shipSunk = False
 
     if hit:
-        updatedBoards = decrementTargetFleetLife(updatedBoards, currentPlayer)
+        # check entire ship:
+        # 1 find ship line in opponent ships
+        if currentPlayer == PLAYER_1:
+            ships = gameState[PLAYER_2]["ships"]
+        else:
+            ships = gameState[PLAYER_1]["ships"]
 
-    return updatedBoards, hit
+        shipLine = []
+
+        for ship in ships:
+            for partCoord in ship:
+                if partCoord == coord:
+                    shipLine = ship
+                    break
+
+        # 2 check each coord of the ship with isShipPartHit
+        shipSunk = True
+
+        for i in shipLine:
+            x, y = getCoords(i)
+            if updatedGameState[currentPlayer]["opponent"][x][y] != SQUARE_SUCCESS_SHOT:
+                shipSunk = False
+                break
+
+        updatedGameState = decrementTargetFleetLife(updatedGameState, currentPlayer)
+
+    return updatedGameState, hit, shipSunk
+
+def isShipPartHit(shipPart, boards, player):
+    x, y = getCoords(shipPart)
+
+    if player == PLAYER_1:
+        if boards[PLAYER_2]["opponent"][x][y] == SQUARE_SUCCESS_SHOT:
+            return True    
+    else:
+        if boards[PLAYER_1]["opponent"][x][y] == SQUARE_SUCCESS_SHOT:
+            return True
+
+    return False
