@@ -23,37 +23,45 @@ def displayPlayerBoard(boards, player, hit):
 
 def displayBoard(board, title="BOARD"):
     print(title)
-    print(' ', end='')
+    print('  ', end='')
 
-    # print header
+    # print numbers header
     for x in range(len(board)):
-        print(" " + str(x+1) + " ", end='')
-
-    # ascii codes for displaying grid
-    # upperleftcorner = u'\u2554'  
-    # downT = u'\u2569'
-    # T = u'\u2566'
-    # F = u'\u2560'
-    # line = u'\u2550'
-    # cross = u'\u256c'
+        print("  " + str(x+1) + " ", end='')
 
     print()
 
     for x in range(len(board)):
-        # display letters using their unicode (starting form A)
-        line = chr(x + UNICODE_FOR_A_CHAR)
+        print("   ", end="")
 
         for i in range(len(board)):
+            print("--- ", end="")
+        
+        print()
+
+        # display letters using their unicode (starting form A)
+        line = chr(x + UNICODE_FOR_A_CHAR) + " |"
+
+        for i in range(len(board)):
+
             if board[x][i] == SQUARE_SHIP:
                 line += " S "
             elif board[x][i] == SQUARE_FAILED_SHOT:
-                line += " O "
+                line += " O |"
             elif board[x][i] == SQUARE_SUCCESS_SHOT:
-                line += " X "
+                line += " X |"
             else:
-                line += "   "
+                line += "   |"
 
         print(line)
+
+    print("   ", end="")
+
+    for i in range(len(board)):
+        print("--- ", end="")
+
+    print()
+    
 
 def displayShootResult(hit, boards, currentPlayer):
     clear()
