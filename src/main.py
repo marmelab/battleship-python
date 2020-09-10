@@ -1,8 +1,9 @@
 import sys
-from Game import shoot, switchPlayer, initGame, gameIsWon
+from Game import shoot, switchPlayer, initGame, gameIsWon, startCountDown, stopCountDown
 from utils import isValid
 from Config import getPlayersConfig
 import ui
+import time
 
 config1, config2 = getPlayersConfig()
 
@@ -12,11 +13,14 @@ while newGame:
 
     gameState, currentPlayer = initGame(config1, config2, 10)
     hit = False
+    timeOver = False
 
-    while not gameIsWon(gameState, currentPlayer):
+    while not gameIsWon(gameState, currentPlayer) and not timeOver:
 
         if not hit:
             ui.displayLookAwayMsg(currentPlayer)
+
+        turnStart = startCountDown()
 
         # Display current player board
         ui.displayPlayerBoard(gameState, currentPlayer, hit)
@@ -31,6 +35,11 @@ while newGame:
 
         # Launch a missile to that coordinate
         gameState, hit, shipSunk = shoot(coord, gameState, currentPlayer)
+
+        gameState = stopCountDown(turnStart, currentPlayer, gameState)
+        if gameState[currentPlayer]["time"] <= 0:
+            timeOver = True
+            break
 
         # Display result
         ui.displayPlayerBoard(gameState, currentPlayer, hit)
@@ -48,6 +57,8 @@ while newGame:
             input("Too bad, you hit the water. Press enter to continue.")
             currentPlayer = switchPlayer(currentPlayer)
 
-    ui.displayWinner(gameState, currentPlayer)
+    ui.displayWinner(gameState, currentPlayer, timeOver)
 
     newGame = ui.queryYesNo("Do you want to start a new game?")
+
+print("Goodbye!")

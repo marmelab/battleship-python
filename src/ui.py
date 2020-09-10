@@ -1,6 +1,6 @@
 import os
 import sys
-from Game import switchPlayer, gameIsWon, isShipPartHit
+from Game import switchPlayer, gameIsWon, isShipPartHit, getOpponent
 from copy import deepcopy
 from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
 
@@ -20,12 +20,14 @@ def displayLookAwayMsg(player):
     elif player == PLAYER_2:
         input("PLAYER 1, look away. PLAYER 2, press enter when ready")
 
-def displayPlayerBoard(boards, player, hit):
+def displayPlayerBoard(gameState, player, hit):
     clear()
 
-    displayPlayerFleet(boards, player)
+    displayPlayerFleet(gameState, player)
     print()
-    displayBoard(boards[player]["opponent_board"], getPlayerName(player) + "'S TURN")
+
+    timeLeft = f' ({gameState[player]["time"]} seconds left)'
+    displayBoard(gameState[player]["opponent_board"], getPlayerName(player) + "'S TURN" + timeLeft)
     
 def displayShip(ship, boards, player):
     for shipPart in ship:
@@ -83,9 +85,12 @@ def displayBoard(board, title="BOARD"):
 def displayFleetLife(player, boards):
     print('YOUR FLEET LIFE: ' + str(boards[player]["life"]))
 
-def displayWinner(boards, player):
+def displayWinner(boards, player, timeOver):
     print()
-    print("You blew up your oppponent's fleet! Congratulations " + getPlayerName(player) + "!")
+    if timeOver:
+        print("TIME'S OVER! " + getPlayerName(getOpponent(player)) + " won this game.")
+    else:
+        print("You blew up your oppponent's fleet! Congratulations " + getPlayerName(player) + "!")
     print()
 
 def getPlayerName(player):

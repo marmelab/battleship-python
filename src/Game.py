@@ -2,8 +2,9 @@ from copy import deepcopy
 from Config import getPlayersConfig
 from Board import initBoard, getBoardFromConfig, updateBoardsAndHit, getShipsFromConfig
 from random import randint
-from constants import PLAYER_1, PLAYER_2, FLEET_LIFE, SQUARE_SUCCESS_SHOT
+from constants import PLAYER_1, PLAYER_2, FLEET_LIFE, SQUARE_SUCCESS_SHOT, GAME_TIME
 from utils import getCoords
+import time
 
 def switchPlayer(currentPlayer):
     if currentPlayer == PLAYER_1:
@@ -19,13 +20,15 @@ def initGame(config1, config2, size):
             "primary": getBoardFromConfig(config1),
             "opponent_board": initBoard(10),
             "life": FLEET_LIFE,
-            "ships": getShipsFromConfig(config1)
+            "ships": getShipsFromConfig(config1),
+            "time": GAME_TIME
         },
         PLAYER_2: {
             "primary": getBoardFromConfig(config2),
             "opponent_board": initBoard(10),
             "life": FLEET_LIFE,
-            "ships": getShipsFromConfig(config2)
+            "ships": getShipsFromConfig(config2),
+            "time": GAME_TIME
         }
     }
 
@@ -96,3 +99,22 @@ def isShipPartHit(shipPart, gameState, player):
 
 def getOpponentBoard(player, gameState):
     return gameState[getOpponent(player)]["opponent_board"]
+    
+def startCountDown():
+    return time.perf_counter()
+
+def stopCountDown(start, player, gameState):
+    stop = time.perf_counter()
+
+    diff = stop - start
+
+    newGameState = updatePlayerTimeLeft(diff, player, gameState)
+    
+    return newGameState
+
+def updatePlayerTimeLeft(time, player, gameState):
+    gameStateCopy = deepcopy(gameState)
+
+    gameStateCopy[player]["time"] -= time
+
+    return gameStateCopy
