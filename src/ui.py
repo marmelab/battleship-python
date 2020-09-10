@@ -89,14 +89,10 @@ def displayWinner(boards, player):
     print()
 
 def getPlayerName(player):
-    name = 'PLAYER'
-
     if player == PLAYER_1:
-        name = 'PLAYER 1'
+        return 'PLAYER 1'
     else:
-        name = 'PLAYER 2'
-
-    return name
+        return 'PLAYER 2'
 
 def queryYesNo(question, default="yes"):
     valid = {"yes": True, "y": True, "ye": True,
