@@ -17,13 +17,13 @@ def initGame(config1, config2, size):
     gameState = {
         PLAYER_1: {
             "primary": getBoardFromConfig(config1),
-            "opponent": initBoard(10),
+            "opponent_board": initBoard(10),
             "life": FLEET_LIFE,
             "ships": getShipsFromConfig(config1)
         },
         PLAYER_2: {
             "primary": getBoardFromConfig(config2),
-            "opponent": initBoard(10),
+            "opponent_board": initBoard(10),
             "life": FLEET_LIFE,
             "ships": getShipsFromConfig(config2)
         }
@@ -37,29 +37,16 @@ def initGame(config1, config2, size):
 
     return gameState, currentPlayer
 
-def decrementTargetFleetLife(boards, attacker):
-    boardsCopy = deepcopy(boards)
-
-    if attacker == PLAYER_1:
-        boardsCopy[PLAYER_2]["life"] -= 1
-    else:
-        boardsCopy[PLAYER_1]["life"] -= 1
-
-    return boardsCopy
-
 def gameIsWon(boards, player):
-    gameIsWon = True
-
     # check all of the ships coords on the board and look if it contains SUCCESS
-    for ship in boards[playerOpponent(player)]["ships"]:
+    for ship in boards[getOpponent(player)]["ships"]:
         for coord in ship:
-            if not isShipPartHit(coord, boards, playerOpponent(player)):
-                gameIsWon = False
-                break
+            if not isShipPartHit(coord, boards, getOpponent(player)):
+                return False
 
-    return gameIsWon
+    return True
 
-def playerOpponent(player):
+def getOpponent(player):
     if player == PLAYER_1:
         return PLAYER_2
     else:
@@ -77,10 +64,7 @@ def shoot(coord, gameState, currentPlayer):
     if hit:
         # check entire ship:
         # 1 find ship line in opponent ships
-        if currentPlayer == PLAYER_1:
-            ships = gameState[PLAYER_2]["ships"]
-        else:
-            ships = gameState[PLAYER_1]["ships"]
+        ships = gameState[getOpponent(currentPlayer)]["ships"]
 
         shipLine = []
 
@@ -95,22 +79,20 @@ def shoot(coord, gameState, currentPlayer):
 
         for i in shipLine:
             x, y = getCoords(i)
-            if updatedGameState[currentPlayer]["opponent"][x][y] != SQUARE_SUCCESS_SHOT:
+            if updatedGameState[currentPlayer]["opponent_board"][x][y] != SQUARE_SUCCESS_SHOT:
                 shipSunk = False
                 break
 
-        updatedGameState = decrementTargetFleetLife(updatedGameState, currentPlayer)
-
     return updatedGameState, hit, shipSunk
 
-def isShipPartHit(shipPart, boards, player):
+def isShipPartHit(shipPart, gameState, player):
+    board = getOpponentBoard(player, gameState)
     x, y = getCoords(shipPart)
 
-    if player == PLAYER_1:
-        if boards[PLAYER_2]["opponent"][x][y] == SQUARE_SUCCESS_SHOT:
-            return True    
-    else:
-        if boards[PLAYER_1]["opponent"][x][y] == SQUARE_SUCCESS_SHOT:
-            return True
+    if board[x][y] == SQUARE_SUCCESS_SHOT:
+        return True
 
     return False
+
+def getOpponentBoard(player, gameState):
+    return gameState[getOpponent(player)]["opponent_board"]

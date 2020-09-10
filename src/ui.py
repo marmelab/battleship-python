@@ -23,14 +23,9 @@ def displayLookAwayMsg(player):
 def displayPlayerBoard(boards, player, hit):
     clear()
 
-    if (player == PLAYER_1):
-        displayPlayerFleet(boards, PLAYER_1)
-        print()
-        displayBoard(boards[PLAYER_1]["opponent"], "PLAYER 1'S TURN")
-    elif player == PLAYER_2:
-        displayPlayerFleet(boards, PLAYER_2)
-        print()
-        displayBoard(boards[PLAYER_2]["opponent"], "PLAYER 2'S TURN")
+    displayPlayerFleet(boards, player)
+    print()
+    displayBoard(boards[player]["opponent_board"], getPlayerName(player) + "'S TURN")
     
 def displayShip(ship, boards, player):
     for shipPart in ship:

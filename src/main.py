@@ -23,11 +23,11 @@ while newGame:
         
         # Ask for a coordinate
         print()
-        coord = input(currentPlayer + ", where do you want to fire (example: A1)? ")
+        coord = input(ui.getPlayerName(currentPlayer) + ", where do you want to fire (example: A1)? ")
         while not isValid(coord):
             print("Sorry, this value is incorrect. Example of valid coordinates: A1")
             print()
-            coord = input(currentPlayer + ", where do you want to fire (example: A1)?  ")
+            coord = input(ui.getPlayerName(currentPlayer) + ", where do you want to fire (example: A1)?  ")
 
         # Launch a missile to that coordinate
         gameState, hit, shipSunk = shoot(coord, gameState, currentPlayer)

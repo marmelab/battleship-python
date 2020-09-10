@@ -44,10 +44,10 @@ def updateBoardsAndHit(coord, gameState, currentPlayer, opponentPlayer):
     hit = False
 
     if (shipFoundAt(coord, gameState[opponentPlayer]["primary"])):
-        gameStateCopy[currentPlayer]["opponent"] = updateBoard(gameState[currentPlayer]["opponent"], coord, SQUARE_SUCCESS_SHOT)
+        gameStateCopy[currentPlayer]["opponent_board"] = updateBoard(gameState[currentPlayer]["opponent_board"], coord, SQUARE_SUCCESS_SHOT)
         hit = True
     else:
-        gameStateCopy[currentPlayer]["opponent"] = updateBoard(gameState[currentPlayer]["opponent"], coord, SQUARE_FAILED_SHOT)
+        gameStateCopy[currentPlayer]["opponent_board"] = updateBoard(gameState[currentPlayer]["opponent_board"], coord, SQUARE_FAILED_SHOT)
 
     return gameStateCopy, hit
 
