@@ -9,4 +9,8 @@ SQUARE_FAILED_SHOT = 3
 PLAYER_1 = "player1"
 PLAYER_2 = "player2"
 
+# TODO: delete this
 FLEET_LIFE = 17
+
+# Total time in seconds available to each player for the entire game
+GAME_TIME = 10
