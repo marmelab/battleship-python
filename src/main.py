@@ -8,15 +8,17 @@ import time
 
 config1, config2 = getPlayersConfig()
         
-ui.displayLookAwayMsg(PLAYER_1)
-fleet1 = ui.askForPlayerFleet()
 
-ui.displayLookAwayMsg(PLAYER_2)
-fleet2 = ui.askForPlayerFleet()
 
 newGame = True
 
 while newGame:
+
+    ui.displayLookAwayMsg(PLAYER_1)
+    fleet1 = ui.askForPlayerFleet()
+
+    ui.displayLookAwayMsg(PLAYER_2)
+    fleet2 = ui.askForPlayerFleet()
 
     gameState, currentPlayer = initGame(fleet1, fleet2, 10)
     hit = False

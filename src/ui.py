@@ -4,6 +4,7 @@ from Game import switchPlayer, gameIsWon, isShipPartHit, getOpponent
 from copy import deepcopy
 from constants import FLEET, UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
 import datetime
+from utils import isValid
 
 def clear():
     os.system('clear')
@@ -14,12 +15,16 @@ def askForPlayerFleet():
     playerShips = []
 
     for i in range(len(FLEET)):
-        position = input("Position ship of length " + str(FLEET[i]) + " entering start point and orientation (B1,H or B1,V) ")
 
-        position = position.split(",")
+        coord = ""
+        orientation = ""
 
-        coord = position[0]
-        orientation = position[1]
+        while not isValid(coord):
+            position = input("Position ship of length " + str(FLEET[i]) + " entering start point and orientation (B1,H or B1,V) ")
+            position = position.split(",")
+            coord = position[0].upper()
+
+        orientation = position[1].upper()
         
         letter = coord[0]
         column = coord[1:]
@@ -36,6 +41,8 @@ def askForPlayerFleet():
 
         print(shipCoords)
         playerShips.append(shipCoords)
+        
+    input()
 
     return playerShips
 
