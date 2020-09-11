@@ -1,8 +1,8 @@
 from copy import deepcopy
 from Config import getPlayersConfig
-from Board import initBoard, getBoardFromConfig, updateBoardsAndHit, getShipsFromConfig
+from Board import initBoard, getBoardFromConfig, getBoardWithFleet, updateBoardsAndHit, getShipsFromConfig
 from random import randint
-from constants import PLAYER_1, PLAYER_2, FLEET_LIFE, SQUARE_SUCCESS_SHOT, GAME_TIME, UNICODE_FOR_A_CHAR
+from constants import PLAYER_1, PLAYER_2, FLEET_LIFE, SQUARE_SUCCESS_SHOT, GAME_TIME, UNICODE_FOR_A_CHAR, FLEET
 from utils import getCoords
 import time
 import os
@@ -15,63 +15,20 @@ def switchPlayer(currentPlayer):
 
     return nextPlayer
 
-def initGame(config1, config2, size):
-    # 1 - ask 5 times a start coordinate, a length and an orientation
-    os.system('clear')
-
-    # f = open("custom1", "w")
-    # f.write("Hello")
-    board = initBoard(size)
-    playerShips = []
-
-    for i in range(2):
-        position = input(str(i + 1) + " => position the boat (B1,2,H) ")
-
-        position = position.split(",")
-
-        coord = position[0]
-        length = int(position[1])
-        orientation = position[2]
-        
-        letter = coord[0]
-        column = coord[1:]
-
-        shipCoords = []
-
-        if (orientation == "H"):
-            for i in range(int(column), length + 1):
-                shipCoords.append(letter + str(i))
-
-        else:
-            for i in range(ord(letter), ord(letter) + length):
-                shipCoords.append(chr(i) + column)
-
-        print(shipCoords)
-        playerShips.append(shipCoords)
-
-        for coord in shipCoords:
-            x = ord(coord[0]) - UNICODE_FOR_A_CHAR
-            y = int(coord[1:]) - 1
-            
-            board[x][y] = 1
-
-    input()
-
-    # f.close()
-
+def initGame(fleet1, fleet2, size):
     gameState = {
         PLAYER_1: {
-            "primary": board,
-            "opponent_board": initBoard(10),
+            "primary": getBoardWithFleet(fleet1),
+            "opponent_board": initBoard(size),
             "life": FLEET_LIFE,
-            "ships": playerShips,
+            "ships": fleet1,
             "time": GAME_TIME
         },
         PLAYER_2: {
-            "primary": getBoardFromConfig(config2),
-            "opponent_board": initBoard(10),
+            "primary": getBoardWithFleet(fleet2),
+            "opponent_board": initBoard(size),
             "life": FLEET_LIFE,
-            "ships": getShipsFromConfig(config2),
+            "ships": fleet2,
             "time": GAME_TIME
         }
     }
@@ -83,6 +40,7 @@ def initGame(config1, config2, size):
         currentPlayer = PLAYER_2
 
     return gameState, currentPlayer
+
 
 def gameIsWon(boards, player):
     # check all of the ships coords on the board and look if it contains SUCCESS

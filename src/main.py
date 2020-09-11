@@ -2,16 +2,23 @@ import sys
 from Game import shoot, switchPlayer, initGame, gameIsWon, startCountDown, stopCountDown
 from utils import isValid
 from Config import getPlayersConfig
+from constants import PLAYER_1, PLAYER_2
 import ui
 import time
 
 config1, config2 = getPlayersConfig()
+        
+ui.displayLookAwayMsg(PLAYER_1)
+fleet1 = ui.askForPlayerFleet()
+
+ui.displayLookAwayMsg(PLAYER_2)
+fleet2 = ui.askForPlayerFleet()
 
 newGame = True
 
 while newGame:
 
-    gameState, currentPlayer = initGame(config1, config2, 10)
+    gameState, currentPlayer = initGame(fleet1, fleet2, 10)
     hit = False
     timeOver = False
 

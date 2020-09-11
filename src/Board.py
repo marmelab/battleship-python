@@ -26,6 +26,18 @@ def getBoardFromConfig(config):
 
     return board
 
+def getBoardWithFleet(fleet):
+    board = initBoard(10)
+
+    for ship in fleet:
+        for coord in ship:
+            x = ord(coord[0]) - UNICODE_FOR_A_CHAR
+            y = int(coord[1:]) - 1
+            
+            board[x][y] = 1
+        
+    return board
+
 def getShipsFromConfig(config):
     ships = []
 

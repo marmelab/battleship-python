@@ -2,11 +2,42 @@ import os
 import sys
 from Game import switchPlayer, gameIsWon, isShipPartHit, getOpponent
 from copy import deepcopy
-from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
+from constants import FLEET, UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
 import datetime
 
 def clear():
     os.system('clear')
+
+def askForPlayerFleet():
+    clear()
+
+    playerShips = []
+
+    for i in range(len(FLEET)):
+        position = input("Position ship of length " + str(FLEET[i]) + " entering start point and orientation (B1,H or B1,V) ")
+
+        position = position.split(",")
+
+        coord = position[0]
+        orientation = position[1]
+        
+        letter = coord[0]
+        column = coord[1:]
+
+        shipCoords = []
+
+        if (orientation == "H"):
+            for i in range(int(column), int(column) + FLEET[i]):
+                shipCoords.append(letter + str(i))
+
+        else:
+            for i in range(ord(letter), ord(letter) + FLEET[i]):
+                shipCoords.append(chr(i) + column)
+
+        print(shipCoords)
+        playerShips.append(shipCoords)
+
+    return playerShips
 
 def displayPlayerFleet(boards, player):
     print("MY FLEET STATE")
@@ -27,7 +58,7 @@ def displayPlayerBoard(gameState, player, hit):
     displayPlayerFleet(gameState, player)
     print()
 
-    displayBoard(gameState[getOpponent(player)]["primary"], "BOARD ADVERSE")
+    displayBoard(gameState[getOpponent(player)]["primary"], "BOARD ADVERSE (DEBUG)")
 
     timeLeft = str(datetime.timedelta(seconds=gameState[player]["time"]))
 
