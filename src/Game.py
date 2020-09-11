@@ -99,14 +99,14 @@ def isShipPartHit(shipPart, gameState, player):
 
 def getOpponentBoard(player, gameState):
     return gameState[getOpponent(player)]["opponent_board"]
-    
+
 def startCountDown():
     return time.perf_counter()
 
 def stopCountDown(start, player, gameState):
     stop = time.perf_counter()
 
-    diff = stop - start
+    diff = int(round(stop - start))
 
     newGameState = updatePlayerTimeLeft(diff, player, gameState)
     

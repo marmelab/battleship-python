@@ -3,6 +3,7 @@ import sys
 from Game import switchPlayer, gameIsWon, isShipPartHit, getOpponent
 from copy import deepcopy
 from constants import UNICODE_FOR_A_CHAR, SQUARE_EMPTY, SQUARE_SUCCESS_SHOT, SQUARE_FAILED_SHOT, SQUARE_SHIP, PLAYER_1, PLAYER_2
+import datetime
 
 def clear():
     os.system('clear')
@@ -26,8 +27,9 @@ def displayPlayerBoard(gameState, player, hit):
     displayPlayerFleet(gameState, player)
     print()
 
-    timeLeft = f' ({gameState[player]["time"]} seconds left)'
-    displayBoard(gameState[player]["opponent_board"], getPlayerName(player) + "'S TURN" + timeLeft)
+    timeLeft = str(datetime.timedelta(seconds=gameState[player]["time"]))
+
+    displayBoard(gameState[player]["opponent_board"], getPlayerName(player) + "'S TURN. Time left => " + timeLeft)
     
 def displayShip(ship, boards, player):
     for shipPart in ship:
