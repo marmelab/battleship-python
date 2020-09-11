@@ -27,6 +27,8 @@ def displayPlayerBoard(gameState, player, hit):
     displayPlayerFleet(gameState, player)
     print()
 
+    displayBoard(gameState[getOpponent(player)]["primary"], "BOARD ADVERSE")
+
     timeLeft = str(datetime.timedelta(seconds=gameState[player]["time"]))
 
     displayBoard(gameState[player]["opponent_board"], getPlayerName(player) + "'S TURN. Time left => " + timeLeft)
@@ -85,7 +87,7 @@ def displayBoard(board, title="BOARD"):
         for i in range(len(board)):
 
             if board[x][i] == SQUARE_SHIP:
-                line += " S "
+                line += " S " + u'\u2502'
             elif board[x][i] == SQUARE_FAILED_SHOT:
                 line += " O " + u'\u2502'
             elif board[x][i] == SQUARE_SUCCESS_SHOT:

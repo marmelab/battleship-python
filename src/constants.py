@@ -13,4 +13,4 @@ PLAYER_2 = "player2"
 FLEET_LIFE = 17
 
 # Total time in seconds available to each player for the entire game
-GAME_TIME = 10
+GAME_TIME = 1200
