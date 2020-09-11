@@ -45,40 +45,64 @@ def displayBoard(board, title="BOARD"):
     print(title)
     print('  ', end='')
 
-    # print numbers header
+    # numbers header
     for x in range(len(board)):
         print("  " + str(x+1) + " ", end='')
 
     print()
 
+    # upper left corner
+    print("  " + u'\u250c', end="")
+
+    # top border
     for x in range(len(board)):
-        print("   ", end="")
+        if x < len(board) - 1:
+            print(u'\u2500' + u'\u2500' + u'\u2500' + u'\u252c', end="")
+        else:
+            print(u'\u2500' + u'\u2500' + u'\u2500' + u'\u2510')
 
-        for i in range(len(board)):
-            print("--- ", end="")
+    for x in range(len(board)):
+
+        # line separator between letters (after A)
+        if x > 0:
+            print("  ", end="")
+
+            print(u'\u251c', end="")
+            
+            for i in range(len(board)):
+                if i < len(board) - 1:
+                    print(u'\u2500' + u'\u2500' + u'\u2500' + u'\u253c', end="")
+                else:
+                    print(u'\u2500' + u'\u2500' + u'\u2500' + u'\u2524', end="")
+            
+            print()
         
-        print()
-
         # display letters using their unicode (starting form A)
-        line = chr(x + UNICODE_FOR_A_CHAR) + " |"
+        line = chr(x + UNICODE_FOR_A_CHAR) + " " + u'\u2502'
 
         for i in range(len(board)):
 
             if board[x][i] == SQUARE_SHIP:
                 line += " S "
             elif board[x][i] == SQUARE_FAILED_SHOT:
-                line += " O |"
+                line += " O " + u'\u2502'
             elif board[x][i] == SQUARE_SUCCESS_SHOT:
-                line += " X |"
+                line += " X " + u'\u2502'
             else:
-                line += "   |"
+                line += "   " + u'\u2502'
 
         print(line)
 
-    print("   ", end="")
+    print("  ", end="")
 
+    print(u'\u2514', end="")
+
+    # border bottom
     for i in range(len(board)):
-        print("--- ", end="")
+        if i < len(board) - 1:
+            print(u'\u2500' + u'\u2500' + u'\u2500' + u'\u2534' , end="")
+        else:
+            print(u'\u2500' + u'\u2500' + u'\u2500' + u'\u2518' , end="")
 
     print()
 
